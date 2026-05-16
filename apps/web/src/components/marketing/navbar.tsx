@@ -1,16 +1,36 @@
 import Link from "next/link";
 
+import { LanguageSwitcher } from "@/components/api-meter/language-switcher";
 import { Button } from "@/components/ui/button";
+import { getCurrentLocale } from "@/lib/locale";
 
-const navItems = [
-  { href: "/developers", label: "Developers" },
-  { href: "/docs", label: "Docs" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/case-study", label: "Case Study" },
-  { href: "/contact", label: "Contact" },
-];
+const copy = {
+  en: {
+    navItems: [
+      { href: "/developers", label: "Developers" },
+      { href: "/docs", label: "Docs" },
+      { href: "/pricing", label: "Pricing" },
+      { href: "/case-study", label: "Case Study" },
+      { href: "/contact", label: "Contact" },
+    ],
+    demo: "Open demo",
+  },
+  fr: {
+    navItems: [
+      { href: "/developers", label: "Developpeurs" },
+      { href: "/docs", label: "Docs" },
+      { href: "/pricing", label: "Prix" },
+      { href: "/case-study", label: "Etude" },
+      { href: "/contact", label: "Contact" },
+    ],
+    demo: "Voir la demo",
+  },
+} as const;
 
-export function Navbar() {
+export async function Navbar() {
+  const locale = await getCurrentLocale();
+  const t = copy[locale];
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
@@ -21,7 +41,7 @@ export function Navbar() {
           API Meter
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
-          {navItems.map((item) => (
+          {t.navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -31,9 +51,12 @@ export function Navbar() {
             </Link>
           ))}
         </nav>
-        <Button asChild size="sm">
-          <Link href="/dashboard">Open demo</Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher current={locale} />
+          <Button asChild size="sm">
+            <Link href="/dashboard">{t.demo}</Link>
+          </Button>
+        </div>
       </div>
     </header>
   );

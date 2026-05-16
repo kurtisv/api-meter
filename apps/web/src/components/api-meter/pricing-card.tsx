@@ -1,9 +1,11 @@
 import { Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import type { Locale } from "@/i18n/config";
 
 export function PricingCard({
   plan,
+  locale = "en",
 }: {
   plan: {
     name: string;
@@ -12,7 +14,11 @@ export function PricingCard({
     features: string[];
     featured?: boolean;
   };
+  locale?: Locale;
 }) {
+  const buttonLabel = locale === "fr" ? "Voir le plan demo" : "View demo plan";
+  const recommendedLabel = locale === "fr" ? "Recommande" : "Recommended";
+
   return (
     <article
       className={`border bg-card p-6 shadow-sm ${
@@ -23,7 +29,7 @@ export function PricingCard({
         <h2 className="text-xl font-semibold">{plan.name}</h2>
         {plan.featured ? (
           <span className="bg-teal-600 px-2.5 py-1 text-xs font-semibold text-white">
-            Recommended
+            {recommendedLabel}
           </span>
         ) : null}
       </div>
@@ -40,7 +46,7 @@ export function PricingCard({
         ))}
       </ul>
       <Button className="mt-8 w-full" variant={plan.featured ? "default" : "secondary"}>
-        View demo plan
+        {buttonLabel}
       </Button>
     </article>
   );

@@ -39,6 +39,7 @@ business dashboards, premium marketing sites, and SaaS/API portals.
 - [x] Demo dashboard overview
 - [x] Safe demo API endpoint retained
 - [x] OpenAPI route branded
+- [x] FR/EN language switcher for public pages
 
 ### UI/UX
 
@@ -63,7 +64,7 @@ business dashboards, premium marketing sites, and SaaS/API portals.
 
 - Date: 2026-05-16
 - Completed: API Meter scaffold, product direction, public pages, dashboard demo,
-  docs, and design documentation.
+  docs, design documentation, and FR/EN language switcher.
 - Remaining: GitHub public repo, production deployment, Symphonee note update.
 - Blockers: none currently.
 - Next step: run checks and fix anything failing before publishing.

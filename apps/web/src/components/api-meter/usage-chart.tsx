@@ -1,6 +1,6 @@
 import { usageBars } from "@/data/api-meter";
 
-export function UsageChart() {
+export function UsageChart({ badge = "Live demo data" }: { badge?: string }) {
   return (
     <div className="border border-border bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between gap-4">
@@ -9,7 +9,7 @@ export function UsageChart() {
           <p className="mt-1 text-2xl font-semibold">1.28M requests</p>
         </div>
         <span className="border border-teal-200 bg-teal-50 px-2.5 py-1 text-xs font-medium text-teal-700">
-          Live demo data
+          {badge}
         </span>
       </div>
       <div className="mt-8 flex h-48 items-end gap-2">

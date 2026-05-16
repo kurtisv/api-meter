@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/api-meter/section-heading";
 import { MarketingPageShell } from "@/components/marketing/page-shell";
 import { Button } from "@/components/ui/button";
 import { endpoints, technicalHighlights } from "@/data/api-meter";
+import { getCurrentLocale } from "@/lib/locale";
 
 export const metadata: Metadata = {
   title: "Developers",
@@ -14,31 +15,63 @@ export const metadata: Metadata = {
     "Explore API Meter developer workflows for API keys, usage events, scopes, rate limits, and OpenAPI documentation.",
 };
 
-export default function DevelopersPage() {
+const copy = {
+  en: {
+    eyebrow: "Developer portal",
+    title: "A clean API experience for teams that sell usage.",
+    intro:
+      "The portal documents credential patterns, metered events, endpoint structure, and rate-limit expectations in a way a real integration team could understand quickly.",
+    docs: "Read docs",
+    demo: "Try demo endpoint",
+    capEyebrow: "Capabilities",
+    capTitle: "Focused primitives for API products.",
+    capDescription:
+      "Each capability maps to a concrete product need: access, control, observation, and billing readiness.",
+    refEyebrow: "API reference",
+    refTitle: "Endpoint examples that explain the product quickly.",
+  },
+  fr: {
+    eyebrow: "Portail developpeur",
+    title: "Une experience API claire pour les equipes qui vendent de l'usage.",
+    intro:
+      "Le portail documente les cles, les evenements mesures, les endpoints et les limites d'une facon qu'une vraie equipe d'integration peut comprendre rapidement.",
+    docs: "Lire les docs",
+    demo: "Tester l'endpoint demo",
+    capEyebrow: "Capacites",
+    capTitle: "Des primitives ciblees pour les produits API.",
+    capDescription:
+      "Chaque capacite repond a un besoin concret: acces, controle, observation et preparation a la facturation.",
+    refEyebrow: "Reference API",
+    refTitle: "Des exemples d'endpoints qui expliquent vite le produit.",
+  },
+} as const;
+
+export default async function DevelopersPage() {
+  const locale = await getCurrentLocale();
+  const t = copy[locale];
+
   return (
     <MarketingPageShell>
       <main>
         <section className="mx-auto grid max-w-6xl gap-12 px-6 py-16 sm:py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-700">
-              Developer portal
+              {t.eyebrow}
             </p>
             <h1 className="mt-5 text-4xl font-semibold tracking-normal text-balance sm:text-6xl">
-              A clean API experience for teams that sell usage.
+              {t.title}
             </h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              The portal documents credential patterns, metered events,
-              endpoint structure, and rate-limit expectations in a way a real
-              integration team could understand quickly.
+              {t.intro}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild>
                 <Link href="/docs">
-                  Read docs <ArrowRight className="size-4" />
+                  {t.docs} <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button asChild variant="secondary">
-                <Link href="/api/v1/demo">Try demo endpoint</Link>
+                <Link href="/api/v1/demo">{t.demo}</Link>
               </Button>
             </div>
           </div>
@@ -48,9 +81,9 @@ export default function DevelopersPage() {
         <section className="border-y border-border bg-white">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <SectionHeading
-              eyebrow="Capabilities"
-              title="Focused primitives for API products."
-              description="Each capability maps to a concrete product need: access, control, observation, and billing readiness."
+              eyebrow={t.capEyebrow}
+              title={t.capTitle}
+              description={t.capDescription}
             />
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {technicalHighlights.map((item) => (
@@ -65,8 +98,8 @@ export default function DevelopersPage() {
 
         <section className="mx-auto max-w-6xl px-6 py-16">
           <SectionHeading
-            eyebrow="API reference"
-            title="Endpoint examples that explain the product quickly."
+            eyebrow={t.refEyebrow}
+            title={t.refTitle}
           />
           <div className="mt-10 grid gap-4">
             {endpoints.map((endpoint) => (

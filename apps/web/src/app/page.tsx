@@ -12,10 +12,150 @@ import {
   platformFeatures,
   productStats,
   technicalHighlights,
-  workflowSteps,
 } from "@/data/api-meter";
+import { getCurrentLocale } from "@/lib/locale";
 
-export default function Home() {
+const copy = {
+  en: {
+    eyebrow: "API usage metering",
+    title: "Make every API call measurable, billable, and safe.",
+    intro:
+      "API Meter is a polished SaaS/API portal concept for teams that need API keys, usage tracking, rate-limit visibility, and billing-ready records without turning the product into a heavy dashboard.",
+    primary: "Explore the API",
+    secondary: "Open demo dashboard",
+    checks: ["No credit card demo", "OpenAPI-ready", "Prisma-backed model"],
+    features: [
+      {
+        title: "Meter every request",
+        description:
+          "Capture API key, route, latency, status code, tenant, and billable unit without forcing teams into a heavy analytics stack.",
+      },
+      {
+        title: "Ship plans with confidence",
+        description:
+          "Model plan limits, overage rules, and billing-ready usage records before the first paid customer asks for an invoice.",
+      },
+      {
+        title: "Protect your API surface",
+        description:
+          "Use scopes, hashed credentials, rate limits, and structured logs to keep developer access controlled and auditable.",
+      },
+    ],
+    platformEyebrow: "Platform",
+    platformTitle: "Everything an API business needs before usage becomes messy.",
+    platformDescription:
+      "The product story is intentionally focused: capture usage, understand customers, enforce limits, and prepare billing exports.",
+    dashboardEyebrow: "Dashboard",
+    dashboardTitle: "A calmer view of key activity, usage pressure, and billing signals.",
+    dashboardDescription:
+      "The dashboard keeps the details visible without burying the operator in unnecessary widgets.",
+    chartBadge: "Live demo data",
+    workflowEyebrow: "Workflow",
+    workflowTitle: "From first API key to billing export, the experience stays direct.",
+    steps: [
+      {
+        number: "01",
+        title: "Connect",
+        description:
+          "Drop the middleware into your API routes and start attaching customer, key, and endpoint context to each call.",
+      },
+      {
+        number: "02",
+        title: "Observe",
+        description:
+          "Read clean usage charts, failed request patterns, key activity, and limit pressure before it becomes support work.",
+      },
+      {
+        number: "03",
+        title: "Control",
+        description:
+          "Tune scopes, rotate keys, raise limits, and keep noisy integrations from affecting the rest of the platform.",
+      },
+      {
+        number: "04",
+        title: "Monetize",
+        description:
+          "Export billing-ready records and align product packaging with the usage customers actually create.",
+      },
+    ],
+    proofEyebrow: "Technical proof",
+    proofTitle: "Built to show the API portal side of the starter.",
+    proofText:
+      "API Meter keeps the portfolio story practical: it uses the starter foundations for API routes, auth-ready dashboards, billing structure, tests, and documentation.",
+  },
+  fr: {
+    eyebrow: "Mesure d'usage API",
+    title: "Rendre chaque appel API mesurable, facturable et securise.",
+    intro:
+      "API Meter est un concept de portail SaaS/API pour les equipes qui ont besoin de cles API, de suivi d'usage, de visibilite sur les limites et de donnees pretes pour la facturation sans transformer le produit en dashboard lourd.",
+    primary: "Explorer l'API",
+    secondary: "Voir le dashboard demo",
+    checks: ["Demo sans carte", "OpenAPI pret", "Modele Prisma pret"],
+    features: [
+      {
+        title: "Mesurer chaque requete",
+        description:
+          "Capturer la cle API, la route, la latence, le statut, le client et l'unite facturable sans imposer une grosse stack analytics.",
+      },
+      {
+        title: "Lancer des plans avec confiance",
+        description:
+          "Modeliser les limites, les depassements et les donnees pretes pour la facturation avant le premier vrai client payant.",
+      },
+      {
+        title: "Proteger la surface API",
+        description:
+          "Utiliser des scopes, des cles hashees, des limites et des logs structures pour garder les acces controlables et auditables.",
+      },
+    ],
+    platformEyebrow: "Plateforme",
+    platformTitle: "Tout ce qu'une API commerciale doit maitriser avant que l'usage devienne flou.",
+    platformDescription:
+      "Le produit reste volontairement cible: capturer l'usage, comprendre les clients, appliquer les limites et preparer les exports de facturation.",
+    dashboardEyebrow: "Dashboard",
+    dashboardTitle: "Une vue plus calme de l'activite des cles, de la pression d'usage et des signaux de facturation.",
+    dashboardDescription:
+      "Le dashboard garde les details visibles sans noyer l'operateur dans des widgets inutiles.",
+    chartBadge: "Donnees demo",
+    workflowEyebrow: "Flux",
+    workflowTitle: "De la premiere cle API a l'export de facturation, l'experience reste directe.",
+    steps: [
+      {
+        number: "01",
+        title: "Connecter",
+        description:
+          "Brancher le middleware aux routes API et attacher le contexte client, cle et endpoint a chaque appel.",
+      },
+      {
+        number: "02",
+        title: "Observer",
+        description:
+          "Lire les tendances d'usage, les erreurs, l'activite des cles et la pression sur les limites avant que ca devienne du support.",
+      },
+      {
+        number: "03",
+        title: "Controler",
+        description:
+          "Ajuster les scopes, tourner les cles, relever les limites et isoler les integrations trop bruyantes.",
+      },
+      {
+        number: "04",
+        title: "Monetiser",
+        description:
+          "Exporter des donnees pretes pour la facturation et aligner les plans avec l'usage reel des clients.",
+      },
+    ],
+    proofEyebrow: "Preuve technique",
+    proofTitle: "Construit pour montrer le cote portail API du starter.",
+    proofText:
+      "API Meter garde une histoire de portfolio pratique: routes API, dashboard pret pour l'auth, structure de facturation, tests et documentation.",
+  },
+} as const;
+
+export default async function Home() {
+  const locale = await getCurrentLocale();
+  const t = copy[locale];
+
   return (
     <MarketingPageShell>
       <main>
@@ -23,36 +163,31 @@ export default function Home() {
           <div className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-16 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-700">
-                API usage metering
+                {t.eyebrow}
               </p>
               <h1 className="mt-5 max-w-4xl text-5xl font-semibold tracking-normal text-balance sm:text-7xl">
-                Make every API call measurable, billable, and safe.
+                {t.title}
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-                API Meter is a polished SaaS/API portal concept for teams that
-                need API keys, usage tracking, rate-limit visibility, and
-                billing-ready records without turning the product into a heavy
-                dashboard.
+                {t.intro}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild size="lg">
                   <Link href="/developers">
-                    Explore the API <ArrowRight className="size-4" />
+                    {t.primary} <ArrowRight className="size-4" />
                   </Link>
                 </Button>
                 <Button asChild size="lg" variant="secondary">
-                  <Link href="/dashboard">Open demo dashboard</Link>
+                  <Link href="/dashboard">{t.secondary}</Link>
                 </Button>
               </div>
               <div className="mt-10 grid gap-3 text-sm text-muted-foreground sm:grid-cols-3">
-                {["No credit card demo", "OpenAPI-ready", "Prisma-backed model"].map(
-                  (item) => (
+                {t.checks.map((item) => (
                     <div key={item} className="flex items-center gap-2">
                       <CheckCircle2 className="size-4 text-teal-700" />
                       {item}
                     </div>
-                  ),
-                )}
+                ))}
               </div>
             </div>
             <CodePanel />
@@ -67,20 +202,23 @@ export default function Home() {
 
         <section className="mx-auto max-w-6xl px-6 py-16">
           <SectionHeading
-            eyebrow="Platform"
-            title="Everything an API business needs before usage becomes messy."
-            description="The product story is intentionally focused: capture usage, understand customers, enforce limits, and prepare billing exports."
+            eyebrow={t.platformEyebrow}
+            title={t.platformTitle}
+            description={t.platformDescription}
           />
           <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {platformFeatures.map((feature) => (
+            {t.features.map((feature, index) => {
+              const Icon = platformFeatures[index].icon;
+              return (
               <article key={feature.title} className="border border-border bg-card p-6 shadow-sm">
-                <feature.icon className="size-6 text-teal-700" />
+                <Icon className="size-6 text-teal-700" />
                 <h3 className="mt-5 text-xl font-semibold">{feature.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">
                   {feature.description}
                 </p>
               </article>
-            ))}
+              );
+            })}
           </div>
         </section>
 
@@ -88,9 +226,9 @@ export default function Home() {
           <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
             <div>
               <SectionHeading
-                eyebrow="Dashboard"
-                title="A calmer view of key activity, usage pressure, and billing signals."
-                description="The dashboard keeps the details visible without burying the operator in unnecessary widgets."
+                eyebrow={t.dashboardEyebrow}
+                title={t.dashboardTitle}
+                description={t.dashboardDescription}
               />
               <div className="mt-8 grid gap-3">
                 {apiKeys.map((key) => (
@@ -105,23 +243,23 @@ export default function Home() {
                       </p>
                     </div>
                     <span className="w-fit border border-border bg-card px-2.5 py-1 text-xs font-medium">
-                      {key.status}
+                      {locale === "fr" && key.status === "Near limit" ? "Pres de la limite" : key.status}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
-            <UsageChart />
+            <UsageChart badge={t.chartBadge} />
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-6 py-16">
           <SectionHeading
-            eyebrow="Workflow"
-            title="From first API key to billing export, the experience stays direct."
+            eyebrow={t.workflowEyebrow}
+            title={t.workflowTitle}
           />
           <div className="mt-10 grid gap-4 md:grid-cols-4">
-            {workflowSteps.map((step) => (
+            {t.steps.map((step) => (
               <article key={step.number} className="border-l border-border pl-5">
                 <p className="font-mono text-sm text-teal-700">{step.number}</p>
                 <h3 className="mt-4 text-lg font-semibold">{step.title}</h3>
@@ -138,15 +276,13 @@ export default function Home() {
             <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-300">
-                  Technical proof
+                  {t.proofEyebrow}
                 </p>
                 <h2 className="mt-4 text-3xl font-semibold tracking-normal text-balance sm:text-4xl">
-                  Built to show the API portal side of the starter.
+                  {t.proofTitle}
                 </h2>
                 <p className="mt-4 text-base leading-7 text-slate-300">
-                  API Meter keeps the portfolio story practical: it uses the
-                  starter foundations for API routes, auth-ready dashboards,
-                  billing structure, tests, and documentation.
+                  {t.proofText}
                 </p>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
