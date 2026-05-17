@@ -41,7 +41,7 @@ export async function publishEcosystemEvent(input: PublishEcosystemEventInput) {
       await ensureEcosystemTables();
       return await writeEcosystemEvent(input, flowId, targetApps);
     } catch {
-      return null;
+      return (await publishSupabaseEcosystemEvent(input, flowId, targetApps)) as Awaited<ReturnType<typeof writeEcosystemEvent>> | null;
     }
   }
 }
@@ -132,7 +132,7 @@ export async function getIncomingEcosystemNotifications(appKey: string, take = 6
       take,
     });
   } catch {
-    return [];
+    return (await getSupabaseRows("EcosystemNotification", `appKey=eq.${encodeURIComponent(appKey)}&order=createdAt.desc&limit=${take}`)) as Awaited<ReturnType<typeof prisma.ecosystemNotification.findMany>>;
   }
 }
 
@@ -143,8 +143,85 @@ export async function getRecentEcosystemEvents(take = 20) {
       take,
     });
   } catch {
-    return [];
+    return (await getSupabaseRows("EcosystemEvent", `order=createdAt.desc&limit=${take}`)) as Awaited<ReturnType<typeof prisma.ecosystemEvent.findMany>>;
   }
+}
+
+async function publishSupabaseEcosystemEvent(input: PublishEcosystemEventInput, flowId: string, targetApps: string[]) {
+  const event = await insertSupabaseRow("EcosystemEvent", {
+    id: crypto.randomUUID(),
+    flowId,
+    sourceApp: input.sourceApp,
+    targetApp: targetApps[0] ?? input.targetApp ?? null,
+    eventType: input.eventType,
+    entityType: input.entityType,
+    entityId: input.entityId ?? null,
+    customerName: input.customerName ?? null,
+    customerEmail: input.customerEmail ?? null,
+    title: input.title,
+    description: input.description ?? null,
+    payload: input.payload ?? null,
+    status: "NEW",
+  });
+
+  if (!event) return null;
+
+  await Promise.all(
+    targetApps.map((appKey) =>
+      insertSupabaseRow("EcosystemNotification", {
+        id: crypto.randomUUID(),
+        appKey,
+        eventId: event.id,
+        flowId,
+        title: input.notificationTitle ?? input.title,
+        message: input.notificationMessage ?? input.description ?? input.title,
+        priority: input.priority ?? "NORMAL",
+        isRead: false,
+        actionLabel: input.actionLabel ?? null,
+        actionUrl: input.actionUrl ?? null,
+      }),
+    ),
+  );
+
+  return event;
+}
+
+async function insertSupabaseRow(table: string, row: Record<string, unknown>): Promise<Record<string, unknown> | null> {
+  const response = await fetch(`${getSupabaseUrl()}/rest/v1/${table}`, {
+    method: "POST",
+    headers: getSupabaseHeaders({ prefer: "return=representation" }),
+    body: JSON.stringify(row),
+  }).catch(() => null);
+
+  if (!response?.ok) return null;
+
+  const rows = (await response.json().catch(() => [])) as Record<string, unknown>[];
+  return rows[0] ?? null;
+}
+
+async function getSupabaseRows(table: string, query: string): Promise<Record<string, unknown>[]> {
+  const response = await fetch(`${getSupabaseUrl()}/rest/v1/${table}?select=*&${query}`, {
+    headers: getSupabaseHeaders(),
+    cache: "no-store",
+  }).catch(() => null);
+
+  if (!response?.ok) return [];
+
+  return (await response.json().catch(() => [])) as Record<string, unknown>[];
+}
+
+function getSupabaseUrl() {
+  return process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+}
+
+function getSupabaseHeaders(options?: { prefer?: string }) {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+  return {
+    apikey: key,
+    Authorization: `Bearer ${key}`,
+    "Content-Type": "application/json",
+    ...(options?.prefer ? { Prefer: options.prefer } : {}),
+  };
 }
 
 
