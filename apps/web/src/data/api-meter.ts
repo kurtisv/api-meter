@@ -146,7 +146,7 @@ export const apiKeys = [
 ];
 
 export const ecosystemLogs = [
-  { time: "09:04:12", module: "Luma Studio", route: "POST /contact", client: "Mara Chen", status: "201", latency: "38ms" },
+  { time: "09:04:12", module: "Luma Studio", route: "POST /contact", client: "Lead Luma entrant", status: "201", latency: "38ms" },
   { time: "09:07:44", module: "QuotePilot", route: "POST /api/quotes", client: "Northline Studio", status: "200", latency: "51ms" },
   { time: "10:12:09", module: "ReserveFlow", route: "POST /booking", client: "Elliot Moore", status: "201", latency: "46ms" },
   { time: "11:35:28", module: "CommerceKit", route: "POST /checkout", client: "Atelier Boutique", status: "200", latency: "64ms" },
