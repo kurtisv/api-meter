@@ -157,8 +157,8 @@ export default async function DashboardApiUsagePage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Ecosystem event stream</CardTitle>
-          <CardDescription>Evenements globaux generes par les autres modules du KV Portfolio.</CardDescription>
+          <CardTitle>Ecosystem activity</CardTitle>
+          <CardDescription>Chaque action du parcours recruteur laisse une trace technique mesurable.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -166,9 +166,12 @@ export default async function DashboardApiUsagePage() {
               <TableRow>
                 <TableHead>Time</TableHead>
                 <TableHead>Source</TableHead>
+                <TableHead>Target</TableHead>
                 <TableHead>Event</TableHead>
                 <TableHead>Customer</TableHead>
-                <TableHead>Target</TableHead>
+                <TableHead>Endpoint/action</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Flow</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -176,16 +179,32 @@ export default async function DashboardApiUsagePage() {
                 <TableRow key={event.id}>
                   <TableCell>{event.createdAt.toISOString()}</TableCell>
                   <TableCell>{event.sourceApp}</TableCell>
+                  <TableCell>{event.targetApp ?? "broadcast"}</TableCell>
                   <TableCell>
                     <code className="text-sm">{event.eventType}</code>
                   </TableCell>
                   <TableCell>{event.customerName ?? event.customerEmail ?? "-"}</TableCell>
-                  <TableCell>{event.targetApp ?? "broadcast"}</TableCell>
+                  <TableCell>
+                    <code className="text-sm">
+                      {event.eventType.startsWith("lead.") ? "POST /contact" :
+                        event.eventType.startsWith("quote.") ? "POST /quotes" :
+                        event.eventType.startsWith("booking.") ? "POST /booking" :
+                        event.eventType.startsWith("project.") ? "POST /projects" :
+                        event.eventType.startsWith("order.") ? "POST /checkout" :
+                        event.eventType.startsWith("event.") ? "POST /events" :
+                        event.eventType.startsWith("ticket.") ? "PATCH /tickets" :
+                        "POST /ecosystem/events"}
+                    </code>
+                  </TableCell>
+                  <TableCell>{event.status}</TableCell>
+                  <TableCell>
+                    <code className="text-xs">{event.flowId}</code>
+                  </TableCell>
                 </TableRow>
               ))}
               {ecosystemEvents.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-muted-foreground">
+                  <TableCell colSpan={8} className="text-muted-foreground">
                     Aucun evenement ecosysteme pour l instant. Soumets un formulaire Luma ou cree une commande CommerceKit.
                   </TableCell>
                 </TableRow>
