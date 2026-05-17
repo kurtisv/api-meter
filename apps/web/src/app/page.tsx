@@ -9,6 +9,8 @@ import { MarketingPageShell } from "@/components/marketing/page-shell";
 import { Button } from "@/components/ui/button";
 import {
   apiKeys,
+  ecosystemLogs,
+  moduleUsage,
   platformFeatures,
   productStats,
   technicalHighlights,
@@ -82,6 +84,10 @@ const copy = {
     proofTitle: "Built to show the API portal side of the starter.",
     proofText:
       "API Meter keeps the portfolio story practical: it uses the starter foundations for API routes, auth-ready dashboards, billing structure, tests, and documentation.",
+    logsEyebrow: "Ecosystem telemetry",
+    logsTitle: "Every module leaves a measurable technical trail.",
+    logsText:
+      "The demo logs connect the recruiter journey to concrete API routes: contact forms, quotes, bookings, checkout, support tickets, keys, latency, and status codes.",
   },
   fr: {
     eyebrow: "Mesure d'usage API",
@@ -149,6 +155,10 @@ const copy = {
     proofTitle: "Construit pour montrer le cote portail API du starter.",
     proofText:
       "API Meter garde une histoire de portfolio pratique: routes API, dashboard pret pour l'auth, structure de facturation, tests et documentation.",
+    logsEyebrow: "Telemetrie ecosysteme",
+    logsTitle: "Chaque module laisse une trace technique mesurable.",
+    logsText:
+      "Les logs demo relient le parcours recruteur a des routes API concretes: formulaires, soumissions, reservations, checkout, tickets, cles, latence et statuts.",
   },
 } as const;
 
@@ -159,7 +169,7 @@ export default async function Home() {
   return (
     <MarketingPageShell>
       <main>
-        <section className="border-b border-border bg-[linear-gradient(180deg,#f7fafc_0%,#eef7f7_100%)]">
+        <section className="border-b border-border bg-[radial-gradient(circle_at_top_right,#c7fff3_0%,transparent_28%),linear-gradient(180deg,#f7fafc_0%,#eef7f7_100%)]">
           <div className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-16 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-700">
@@ -250,6 +260,53 @@ export default async function Home() {
               </div>
             </div>
             <UsageChart badge={t.chartBadge} />
+          </div>
+        </section>
+
+        <section className="border-y border-border bg-slate-950 text-white">
+          <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[0.82fr_1.18fr]">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-300">
+                {t.logsEyebrow}
+              </p>
+              <h2 className="mt-4 text-3xl font-semibold tracking-normal text-balance sm:text-5xl">
+                {t.logsTitle}
+              </h2>
+              <p className="mt-5 leading-7 text-slate-300">{t.logsText}</p>
+              <div className="mt-8 grid gap-3">
+                {moduleUsage.map((item) => (
+                  <div key={item.module}>
+                    <div className="mb-2 flex items-center justify-between text-xs text-slate-400">
+                      <span>{item.module}</span>
+                      <span>{item.value}%</span>
+                    </div>
+                    <div className="h-2 bg-slate-800">
+                      <div className="h-2 bg-teal-300" style={{ width: `${item.value}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="overflow-x-auto border border-slate-800 bg-slate-900">
+              <div className="grid min-w-[760px] grid-cols-[5rem_0.8fr_1.2fr_0.9fr_4rem_4rem] gap-3 border-b border-slate-800 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-slate-500">
+                <span>Time</span>
+                <span>Module</span>
+                <span>Route</span>
+                <span>Client</span>
+                <span>Status</span>
+                <span>Latency</span>
+              </div>
+              {ecosystemLogs.map((log) => (
+                <div key={`${log.time}-${log.route}`} className="grid min-w-[760px] grid-cols-[5rem_0.8fr_1.2fr_0.9fr_4rem_4rem] gap-3 border-b border-slate-800 px-4 py-3 font-mono text-xs text-slate-300 last:border-b-0">
+                  <span className="text-slate-500">{log.time}</span>
+                  <span>{log.module}</span>
+                  <span className="text-teal-200">{log.route}</span>
+                  <span>{log.client}</span>
+                  <span className="text-emerald-300">{log.status}</span>
+                  <span>{log.latency}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 

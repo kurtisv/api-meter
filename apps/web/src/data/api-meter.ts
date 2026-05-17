@@ -11,9 +11,9 @@ import {
 } from "lucide-react";
 
 export const productStats = [
-  { label: "events processed", value: "18.4M" },
+  { label: "ecosystem events", value: "42.8k" },
   { label: "median ingest latency", value: "41ms" },
-  { label: "usage accuracy target", value: "99.9%" },
+  { label: "modules measured", value: "8" },
   { label: "API uptime target", value: "99.95%" },
 ];
 
@@ -111,10 +111,10 @@ export const endpoints = [
 ];
 
 export const dashboardMetrics = [
-  { label: "Requests this month", value: "1.28M", change: "+14.8%" },
-  { label: "Billable events", value: "842k", change: "+9.2%" },
-  { label: "Blocked by rate limit", value: "2,184", change: "-6.1%" },
-  { label: "Active API keys", value: "126", change: "+11" },
+  { label: "Requests this month", value: "42.8k", change: "+14.8%" },
+  { label: "Billable events", value: "8.4k", change: "+9.2%" },
+  { label: "Blocked by rate limit", value: "184", change: "-6.1%" },
+  { label: "Active API keys", value: "16", change: "+3" },
 ];
 
 export const usageBars = [
@@ -123,26 +123,45 @@ export const usageBars = [
 
 export const apiKeys = [
   {
-    name: "Atlas CRM production",
-    prefix: "ak_live_8JQ",
+    name: "Northline ClientHub production",
+    prefix: "ak_live_NL8",
     scopes: ["usage:write", "usage:read"],
-    requests: "382k",
+    requests: "18.2k",
     status: "Healthy",
   },
   {
-    name: "Partner sandbox",
-    prefix: "ak_test_K2P",
+    name: "Atelier EventPass scanner",
+    prefix: "ak_evt_A29",
     scopes: ["usage:write"],
-    requests: "41k",
+    requests: "6.7k",
     status: "Near limit",
   },
   {
-    name: "Billing sync worker",
-    prefix: "ak_srv_71N",
+    name: "CommerceKit order worker",
+    prefix: "ak_srv_CK7",
     scopes: ["usage:read", "billing:export"],
-    requests: "9k",
+    requests: "4.1k",
     status: "Healthy",
   },
+];
+
+export const ecosystemLogs = [
+  { time: "09:04:12", module: "Luma Studio", route: "POST /contact", client: "Mara Chen", status: "201", latency: "38ms" },
+  { time: "09:07:44", module: "QuotePilot", route: "POST /api/quotes", client: "Northline Studio", status: "200", latency: "51ms" },
+  { time: "10:12:09", module: "ReserveFlow", route: "POST /booking", client: "Elliot Moore", status: "201", latency: "46ms" },
+  { time: "11:35:28", module: "CommerceKit", route: "POST /checkout", client: "Atelier Boutique", status: "200", latency: "64ms" },
+  { time: "14:18:03", module: "SupportDesk Lite", route: "POST /support", client: "Nadia Fortin", status: "201", latency: "42ms" },
+];
+
+export const moduleUsage = [
+  { module: "Luma", value: 34 },
+  { module: "QuotePilot", value: 52 },
+  { module: "ReserveFlow", value: 45 },
+  { module: "ClientHub", value: 78 },
+  { module: "CommerceKit", value: 61 },
+  { module: "EventPass", value: 69 },
+  { module: "SupportDesk", value: 48 },
+  { module: "API Meter", value: 83 },
 ];
 
 export const technicalHighlights = [

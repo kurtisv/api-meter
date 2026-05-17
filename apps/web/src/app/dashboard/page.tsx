@@ -1,4 +1,5 @@
 import { MetricCard } from "@/components/api-meter/metric-card";
+import { EcosystemNotificationPanel } from "@/components/ecosystem/notification-panel";
 import { UsageChart } from "@/components/api-meter/usage-chart";
 import { apiKeys, dashboardMetrics } from "@/data/api-meter";
 
@@ -30,6 +31,10 @@ export default function DashboardPage() {
               change={metric.change}
             />
           ))}
+        </div>
+
+        <div className="mt-8">
+          <EcosystemNotificationPanel appKey="api-meter" />
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">

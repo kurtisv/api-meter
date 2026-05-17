@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { getRecentEcosystemEvents } from "@/lib/ecosystem";
 import { summarizeApiUsage } from "@/modules/api-portal";
 
 async function getApiUsageData() {
@@ -51,7 +52,10 @@ async function getApiUsageData() {
 }
 
 export default async function DashboardApiUsagePage() {
-  const { rows, summary } = await getApiUsageData();
+  const [{ rows, summary }, ecosystemEvents] = await Promise.all([
+    getApiUsageData(),
+    getRecentEcosystemEvents(25),
+  ]);
 
   return (
     <main className="grid gap-6 px-6 py-10">
@@ -143,6 +147,46 @@ export default async function DashboardApiUsagePage() {
                 <TableRow>
                   <TableCell colSpan={7} className="text-muted-foreground">
                     Aucun usage API pour l instant. Les appels DB-authentifies alimentent cette table.
+                  </TableCell>
+                </TableRow>
+              ) : null}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Ecosystem event stream</CardTitle>
+          <CardDescription>Evenements globaux generes par les autres modules du KV Portfolio.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Time</TableHead>
+                <TableHead>Source</TableHead>
+                <TableHead>Event</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Target</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {ecosystemEvents.map((event) => (
+                <TableRow key={event.id}>
+                  <TableCell>{event.createdAt.toISOString()}</TableCell>
+                  <TableCell>{event.sourceApp}</TableCell>
+                  <TableCell>
+                    <code className="text-sm">{event.eventType}</code>
+                  </TableCell>
+                  <TableCell>{event.customerName ?? event.customerEmail ?? "-"}</TableCell>
+                  <TableCell>{event.targetApp ?? "broadcast"}</TableCell>
+                </TableRow>
+              ))}
+              {ecosystemEvents.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-muted-foreground">
+                    Aucun evenement ecosysteme pour l instant. Soumets un formulaire Luma ou cree une commande CommerceKit.
                   </TableCell>
                 </TableRow>
               ) : null}
