@@ -7,6 +7,8 @@ import { prisma } from "@/lib/db";
 import { getRecentEcosystemEvents } from "@/lib/ecosystem";
 import { summarizeApiUsage } from "@/modules/api-portal";
 
+const timeline = ["Luma Studio", "QuotePilot", "ReserveFlow", "ClientHub", "CommerceKit", "EventPass", "SupportDesk Lite", "API Meter"];
+
 async function getApiUsageData() {
   const session = await auth();
 
@@ -60,6 +62,9 @@ export default async function DashboardApiUsagePage() {
   return (
     <main className="grid gap-6 px-6 py-10">
       <div>
+        <p className="mb-2 inline-flex rounded-md border bg-secondary px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-primary">
+          KV Portfolio Ecosystem - Demo Mode
+        </p>
         <h1 className="text-3xl font-semibold">API Usage</h1>
         <p className="mt-3 text-muted-foreground">
           Suivi des appels API, statuts, unites et latence des cles client.
@@ -110,6 +115,20 @@ export default async function DashboardApiUsagePage() {
           </CardContent>
         </Card>
       </section>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Timeline du parcours</CardTitle>
+          <CardDescription>API Meter est l&apos;etape 08 et mesure toutes les traces creees par les modules.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-2 text-xs font-semibold">
+          {timeline.map((item, index) => (
+            <span key={item} className={index === 7 ? "rounded-md bg-primary px-3 py-2 text-primary-foreground" : "rounded-md border bg-background px-3 py-2"}>
+              {String(index + 1).padStart(2, "0")} {item}
+            </span>
+          ))}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
@@ -188,6 +207,7 @@ export default async function DashboardApiUsagePage() {
                     <code className="text-sm">
                       {event.eventType.startsWith("lead.") ? "POST /contact" :
                         event.eventType.startsWith("quote.") ? "POST /quotes" :
+                        event.eventType.startsWith("consultant.") ? "POST /quotes/consultant" :
                         event.eventType.startsWith("booking.") ? "POST /booking" :
                         event.eventType.startsWith("project.") ? "POST /projects" :
                         event.eventType.startsWith("order.") ? "POST /checkout" :
