@@ -1,7 +1,7 @@
 const fr = {
   app: {
-    name: "KV Web Starter",
-    tagline: "Boilerplate modulaire premium pour sites marketing, booking et SaaS/API.",
+    name: "API Meter",
+    tagline: "Dashboard developpeur pour usage API, logs, endpoints, latence et telemetrie ecosysteme.",
   },
   nav: {
     services: "Services",
@@ -10,7 +10,7 @@ const fr = {
     api: "API",
     docs: "Docs",
     contact: "Contact",
-    dashboard: "Dashboard",
+    dashboard: "Tableau de bord",
   },
   booking: {
     title: "Reservation claire pour services, staff et disponibilites.",

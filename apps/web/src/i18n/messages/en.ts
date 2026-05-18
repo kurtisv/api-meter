@@ -1,7 +1,7 @@
 const en = {
   app: {
-    name: "KV Web Starter",
-    tagline: "Premium modular boilerplate for marketing, booking, and SaaS/API projects.",
+    name: "API Meter",
+    tagline: "Developer dashboard for API usage, logs, endpoints, latency, and ecosystem telemetry.",
   },
   nav: {
     services: "Services",
